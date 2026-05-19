@@ -262,7 +262,7 @@ The Library Management System is a standalone web application that can integrate
 
 ## CONTEXT DIAGRAM
 
-<img src="images/mermaid-diagram.png>
+<img src="images/mermaid-diagram.png" alt="Context Diagram">
 
 # 5. System Evolution
 
