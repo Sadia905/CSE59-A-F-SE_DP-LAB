@@ -1,44 +1,33 @@
-// MessageSender interface
-interface MessageSender {
-    void sendMessage(String message);
-}
+class Patient {
+    String name, nationalId;
 
-// EmailSender implements MessageSender
-class EmailSender implements MessageSender {
-
-    @Override
-    public void sendMessage(String message) {
-        System.out.println("Sending email: " + message);
+    Patient(String name, String nationalId) {
+        this.name = name;
+        this.nationalId = nationalId;
     }
 }
 
-// NotificationService depends on the abstraction
-class NotificationService {
-
-    private MessageSender messageSender;
-
-    // Constructor Injection
-    public NotificationService(MessageSender messageSender) {
-        this.messageSender = messageSender;
-    }
-
-    public void alertUser(String msg) {
-        messageSender.sendMessage(msg);
+class IdValidator {
+    boolean validateId(String id) {
+        return id.length() == 10 || id.length() == 17;
     }
 }
 
-// Main class
+class SmsService {
+    void sendSms(Patient patient) {
+        IdValidator validator = new IdValidator();
+
+        if (validator.validateId(patient.nationalId))
+            System.out.println("Sending SMS to " + patient.name + ": Registration successful.");
+        else
+            System.out.println("Invalid National ID.");
+    }
+}
+
 public class Main {
-
     public static void main(String[] args) {
-
-        // Create EmailSender object
-        MessageSender emailSender = new EmailSender();
-
-        // Inject dependency into NotificationService
-        NotificationService notificationService = new NotificationService(emailSender);
-
-        // Send notification
-        notificationService.alertUser("Your order has been shipped!");
+        Patient patient = new Patient("Ali Ahmed", "1234567890");
+        SmsService sms = new SmsService();
+        sms.sendSms(patient);
     }
 }
