@@ -1,33 +1,39 @@
-class Patient {
-    String name, nationalId;
+// Interface
+interface OptimizableModel {
+    void quantize();
+}
 
-    Patient(String name, String nationalId) {
-        this.name = name;
-        this.nationalId = nationalId;
+// ResNet18 implementation
+class ResNet18 implements OptimizableModel {
+    public void quantize() {
+        System.out.println("Applying int8 quantization for ResNet-18.");
     }
 }
 
-class IdValidator {
-    boolean validateId(String id) {
-        return id.length() == 10 || id.length() == 17;
+// MobileNet implementation
+class MobileNet implements OptimizableModel {
+    public void quantize() {
+        System.out.println("Applying dynamic quantization for MobileNet.");
     }
 }
 
-class SmsService {
-    void sendSms(Patient patient) {
-        IdValidator validator = new IdValidator();
-
-        if (validator.validateId(patient.nationalId))
-            System.out.println("Sending SMS to " + patient.name + ": Registration successful.");
-        else
-            System.out.println("Invalid National ID.");
+// Inference Engine (no modification needed for new models)
+class InferenceEngine {
+    public void process(OptimizableModel model) {
+        model.quantize();
     }
 }
 
+// Main class
 public class Main {
     public static void main(String[] args) {
-        Patient patient = new Patient("Ali Ahmed", "1234567890");
-        SmsService sms = new SmsService();
-        sms.sendSms(patient);
+
+        InferenceEngine engine = new InferenceEngine();
+
+        OptimizableModel model1 = new ResNet18();
+        OptimizableModel model2 = new MobileNet();
+
+        engine.process(model1);
+        engine.process(model2);
     }
 }
