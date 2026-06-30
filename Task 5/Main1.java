@@ -1,43 +1,29 @@
-// Printer interface
-interface Printer {
-    void printDocument();
+// MessageSender interface
+interface MessageSender {
+    void sendMessage(String message);
 }
 
-// Scanner interface
-interface Scanner {
-    void scanDocument();
-}
-
-// FaxMachine interface
-interface FaxMachine {
-    void faxDocument();
-}
-
-// MultiFunctionCopier implements all three interfaces
-class MultiFunctionCopier implements Printer, Scanner, FaxMachine {
+// EmailSender implements MessageSender
+class EmailSender implements MessageSender {
 
     @Override
-    public void printDocument() {
-        System.out.println("Printing...");
-    }
-
-    @Override
-    public void scanDocument() {
-        System.out.println("Scanning...");
-    }
-
-    @Override
-    public void faxDocument() {
-        System.out.println("Faxing...");
+    public void sendMessage(String message) {
+        System.out.println("Sending email: " + message);
     }
 }
 
-// BasicPrinter only implements Printer
-class BasicPrinter implements Printer {
+// NotificationService depends on the abstraction
+class NotificationService {
 
-    @Override
-    public void printDocument() {
-        System.out.println("Printing...");
+    private MessageSender messageSender;
+
+    // Constructor Injection
+    public NotificationService(MessageSender messageSender) {
+        this.messageSender = messageSender;
+    }
+
+    public void alertUser(String msg) {
+        messageSender.sendMessage(msg);
     }
 }
 
@@ -46,16 +32,13 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // Basic Printer
-        BasicPrinter basicPrinter = new BasicPrinter();
-        basicPrinter.printDocument();
+        // Create EmailSender object
+        MessageSender emailSender = new EmailSender();
 
-        System.out.println();
+        // Inject dependency into NotificationService
+        NotificationService notificationService = new NotificationService(emailSender);
 
-        // MultiFunction Copier
-        MultiFunctionCopier copier = new MultiFunctionCopier();
-        copier.printDocument();
-        copier.scanDocument();
-        copier.faxDocument();
+        // Send notification
+        notificationService.alertUser("Your order has been shipped!");
     }
 }
